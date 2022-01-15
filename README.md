@@ -1,6 +1,13 @@
-# Getting Started with Create React App
+# Included Functionalities
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- List products
+- List products by category
+- Paginate list (page size = 5)
+- Order list by name
+- Filter products
+- Search by name
+- Display single product details
+- Add product to wishlist
 
 ## Available Scripts
 
