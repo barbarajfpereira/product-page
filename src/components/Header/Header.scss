@@ -1,0 +1,19 @@
+@import '../../variables';
+
+.header {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid $border-primary;
+  background-color: $background-primary;
+  color: $text-secondary;
+  font-family: $text-family;
+
+  img {
+    margin-left: 10px;
+  }
+
+  &__title {
+    margin-left: 10px;
+  }
+}

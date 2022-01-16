@@ -1,6 +1,6 @@
 import './App.scss';
-import Header from './Header/Header.jsx';
-import Display from './Display/Display.jsx';
+import Header from './components/Header/Header.jsx';
+import Display from './components/Display/Display.jsx';
 
 function App() {
   return (
