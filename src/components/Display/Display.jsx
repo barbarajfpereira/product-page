@@ -9,6 +9,9 @@ const Display = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [ordered, setOrdered] = useState(false);
   const [search, setSearch] = useState('');
+  const [minRating, setMinRating] = useState(null);
+  const [minPrice, setMinPrice] = useState(null);
+  const [maxPrice, setMaxPrice] = useState(null);
 
   useEffect(() => {
     getCategories().then((categories) => {
@@ -36,6 +39,16 @@ const Display = () => {
     });
   }
 
+  if (minRating || minPrice || maxPrice) {
+    shownProducts = shownProducts.filter(({ price, rating }) => {
+      const matchedMinRating = !minRating || rating.rate >= minRating;
+      const matchedMinPrice = !minPrice || price >= minPrice;
+      const matchedMaxPrice = !maxPrice || price <= maxPrice;
+
+      return matchedMinRating && matchedMinPrice && matchedMaxPrice;
+    });
+  }
+
   if (ordered) {
     shownProducts.sort((a, b) => {
       const aTitle = a.title.toUpperCase();
@@ -56,36 +69,72 @@ const Display = () => {
   return (
     <main className='display'>
       <section className='display__filters'>
-        <div className='display__filter'>
+        <div className='filter'>
           <h1>Categories</h1>
 
-          {categories.map((category, index) => (
-            <button
-              key={index}
-              value={category}
-              className={category === selectedCategory ? 'active' : ''}
-              onClick={(e) => setSelectedCategory(e.target.value)}
-            >
-              {category}
-            </button>
-          ))}
+          <div>
+            {categories.map((category, index) => (
+              <button
+                key={index}
+                value={category}
+                className={category === selectedCategory ? 'active' : ''}
+                onClick={(e) => setSelectedCategory(e.target.value)}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
         </div>
 
-        <div className='display__filter'>
-          <h1>Search</h1>
+        <div className='filter'>
+          <h1>Filter</h1>
 
-          <button
-            className={ordered ? 'active' : ''}
-            onClick={() => setOrdered(!ordered)}
-          >
-            Order By Name
-          </button>
+          <div>
+            <button
+              className={ordered ? 'active' : ''}
+              onClick={() => setOrdered(!ordered)}
+            >
+              Order By Name
+            </button>
 
-          <input
-            placeholder='Search product'
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+            <input
+              className='filter__search'
+              placeholder='Search product'
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+
+            <input
+              className='filter__rating'
+              placeholder='Min rating'
+              type='number'
+              min='1'
+              max='5'
+              step='0.1'
+              value={minRating}
+              onChange={(e) => setMinRating(e.target.value)}
+            />
+
+            <input
+              className='filter__price'
+              placeholder='Min price'
+              type='number'
+              min='1'
+              step='10'
+              value={minPrice}
+              onChange={(e) => setMinPrice(e.target.value)}
+            />
+
+            <input
+              className='filter__price'
+              placeholder='Max price'
+              type='number'
+              min='1'
+              step='10'
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(e.target.value)}
+            />
+          </div>
         </div>
       </section>
 

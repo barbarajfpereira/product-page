@@ -13,8 +13,15 @@
   &__filters {
     padding: 20px;
 
-    .display__filter {
-      margin-bottom: 20px;
+    .filter {
+      &__search {
+        width: 280px;
+      }
+
+      &__price,
+      &__rating {
+        width: 130px;
+      }
 
       h1 {
         width: 80px;
@@ -22,11 +29,12 @@
         font-size: 1em;
         vertical-align: middle;
         margin: 0;
+        margin-bottom: 4px;
       }
 
       button {
         text-transform: capitalize;
-        min-width: 110px;
+        min-width: 130px;
 
         &.active {
           background-color: $background-primary;
@@ -38,14 +46,11 @@
         }
       }
 
-      input {
-        width: 240px;
-      }
-
-      h1,
       button,
       input {
         margin-right: 20px;
+        margin-bottom: 20px;
+        font-family: inherit;
       }
     }
   }
