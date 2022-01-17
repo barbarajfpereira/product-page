@@ -1,7 +1,19 @@
-function getProducts() {
-  const url = 'https://fakestoreapi.com/products';
+const API_BASE = 'https://fakestoreapi.com';
 
-  return fetch(url).then((response) => response.json());
+function getProducts() {
+  return fetch(`${API_BASE}/products`).then((response) => response.json());
 }
 
-export { getProducts };
+function getProductsByCategory(category) {
+  return fetch(`${API_BASE}/products/category/${category}`).then((response) =>
+    response.json()
+  );
+}
+
+function getCategories() {
+  return fetch(`${API_BASE}/products/categories`).then((response) =>
+    response.json()
+  );
+}
+
+export { getProducts, getProductsByCategory, getCategories };

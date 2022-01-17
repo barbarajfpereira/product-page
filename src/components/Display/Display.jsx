@@ -1,29 +1,65 @@
 import React, { useEffect, useState } from 'react';
-import { getProducts } from '../../api';
+import { getProducts, getProductsByCategory, getCategories } from '../../api';
 import './Display.scss';
+import rate from '../../assets/rate.png';
 
 const Display = () => {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState(['all']);
+  const [selectedCategory, setSelectedCategory] = useState('all');
 
   useEffect(() => {
-    getProducts().then((products) => {
-      setProducts(products);
+    getCategories().then((categories) => {
+      setCategories(['all', ...categories]);
     });
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (selectedCategory === 'all') {
+      getProducts().then((products) => {
+        setProducts(products);
+      });
+    } else {
+      getProductsByCategory(selectedCategory).then((products) =>
+        setProducts(products)
+      );
+    }
+  }, [selectedCategory]);
 
   return (
     <main className='display'>
-      {products.map(({ id, title, image, price }) => (
-        <div className='product' key={id}>
-          <img className='product__image' src={image} alt={title} />
+      <section className='display__filters'>
+        <h1>Categories</h1>
+        {categories.map((category, index) => (
+          <button
+            key={index}
+            value={category}
+            className={category === selectedCategory ? 'active' : ''}
+            onClick={(e) => setSelectedCategory(e.target.value)}
+          >
+            {category}
+          </button>
+        ))}
+      </section>
 
-          <p className='product__description'>{title}</p>
+      <section className='display__grid'>
+        {products.map(({ id, title, image, price, rating }) => (
+          <div className='product' key={id}>
+            <img className='product__image' src={image} alt={title} />
 
-          <strong className='product__price'>{`${price} €`}</strong>
-        </div>
-      ))}
+            <p className='product__description'>{title}</p>
+
+            <div className='product__details'>
+              <strong className='product__price'>{`${price} €`}</strong>
+
+              <span className='product__rating'>
+                <img src={rate} alt='rating' />
+                <span>{rating.rate}</span>
+              </span>
+            </div>
+          </div>
+        ))}
+      </section>
     </main>
   );
 };
