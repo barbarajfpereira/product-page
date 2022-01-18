@@ -9,7 +9,7 @@ const Display = ({ isWishlist }) => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState(['all']);
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [ordered, setOrdered] = useState(false);
+  const [orderByTitle, setOrderByTitle] = useState(false);
   const [search, setSearch] = useState('');
   const [minRating, setMinRating] = useState();
   const [minPrice, setMinPrice] = useState();
@@ -52,27 +52,26 @@ const Display = ({ isWishlist }) => {
 
   let shownProducts = [...products];
 
-  if (isWishlist) {
-    shownProducts = shownProducts.filter(({ id }) => wishlist.includes(id));
-  }
+  if (isWishlist || search.length || minRating || minPrice || maxPrice) {
+    shownProducts = shownProducts.filter(({ id, title, price, rating }) => {
+      const excludedByWishlist = isWishlist && !wishlist.includes(id);
+      const excludedBySearch =
+        search.length && !title.toUpperCase().includes(search.toUpperCase());
+      const excludedByMinRating = minRating && rating.rate < minRating;
+      const excludedByMinPrice = minPrice && price < minPrice;
+      const excludedByMaxPrice = maxPrice && price > maxPrice;
 
-  if (search.length) {
-    shownProducts = shownProducts.filter(({ title }) =>
-      title.toUpperCase().includes(search.toUpperCase())
-    );
-  }
-
-  if (minRating || minPrice || maxPrice) {
-    shownProducts = shownProducts.filter(({ price, rating }) => {
-      const matchedMinRating = !minRating || rating.rate >= minRating;
-      const matchedMinPrice = !minPrice || price >= minPrice;
-      const matchedMaxPrice = !maxPrice || price <= maxPrice;
-
-      return matchedMinRating && matchedMinPrice && matchedMaxPrice;
+      return (
+        !excludedByWishlist &&
+        !excludedBySearch &&
+        !excludedByMinRating &&
+        !excludedByMinPrice &&
+        !excludedByMaxPrice
+      );
     });
   }
 
-  if (ordered) {
+  if (orderByTitle) {
     shownProducts.sort((a, b) => {
       const aTitle = a.title.toUpperCase();
       const bTitle = b.title.toUpperCase();
@@ -114,8 +113,8 @@ const Display = ({ isWishlist }) => {
 
           <div>
             <button
-              className={ordered ? 'active' : ''}
-              onClick={() => setOrdered(!ordered)}
+              className={orderByTitle ? 'active' : ''}
+              onClick={() => setOrderByTitle(!orderByTitle)}
             >
               Order By Name
             </button>
