@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from 'react';
+// style
+import './Display.scss';
+// api
+import { getProducts, getProductsByCategory, getCategories } from '../../api';
+// components
+import Details from './Details/Details';
+// icons
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
-import { getProducts, getProductsByCategory, getCategories } from '../../api';
-import './Display.scss';
 
 const Display = ({ isWishlist }) => {
+  // state
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState(['all']);
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -15,7 +21,9 @@ const Display = ({ isWishlist }) => {
   const [minPrice, setMinPrice] = useState();
   const [maxPrice, setMaxPrice] = useState();
   const [wishlist, setWishlist] = useState([]);
+  const [detailsId, setDetailsId] = useState();
 
+  // persist wishlist
   useEffect(() => {
     getCategories().then((categories) => {
       setCategories(['all', ...categories]);
@@ -28,6 +36,7 @@ const Display = ({ isWishlist }) => {
     }
   }, []);
 
+  // api call
   useEffect(() => {
     if (selectedCategory === 'all') {
       getProducts().then((products) => {
@@ -40,7 +49,9 @@ const Display = ({ isWishlist }) => {
     }
   }, [selectedCategory]);
 
-  const toggleWishlist = (id) => {
+  const toggleWishlist = (e, id) => {
+    e.stopPropagation();
+
     const newWishlist = wishlist.includes(id)
       ? wishlist.filter((wishlistId) => wishlistId !== id)
       : [...wishlist, id];
@@ -50,6 +61,7 @@ const Display = ({ isWishlist }) => {
     localStorage.setItem('wishlist', JSON.stringify(newWishlist));
   };
 
+  // filters
   let shownProducts = [...products];
 
   if (isWishlist || search.length || minRating || minPrice || maxPrice) {
@@ -91,6 +103,7 @@ const Display = ({ isWishlist }) => {
   return (
     <main className='display'>
       <section className='display__filters'>
+        {/* categories */}
         <div className='filter'>
           <h1>Categories</h1>
 
@@ -112,6 +125,7 @@ const Display = ({ isWishlist }) => {
           <h1>Filter</h1>
 
           <div>
+            {/* alphabetic */}
             <button
               className={orderByTitle ? 'active' : ''}
               onClick={() => setOrderByTitle(!orderByTitle)}
@@ -119,6 +133,7 @@ const Display = ({ isWishlist }) => {
               Order By Name
             </button>
 
+            {/* search */}
             <input
               className='filter__search'
               placeholder='Search product'
@@ -126,6 +141,7 @@ const Display = ({ isWishlist }) => {
               onChange={(e) => setSearch(e.target.value)}
             />
 
+            {/* rating */}
             <input
               className='filter__rating'
               placeholder='Min rating'
@@ -137,6 +153,7 @@ const Display = ({ isWishlist }) => {
               onChange={(e) => setMinRating(e.target.value)}
             />
 
+            {/* price */}
             <input
               className='filter__price'
               placeholder='Min price'
@@ -160,9 +177,10 @@ const Display = ({ isWishlist }) => {
         </div>
       </section>
 
+      {/* products */}
       <section className='display__grid'>
         {shownProducts.map(({ id, title, image, price, rating }) => (
-          <div className='product' key={id}>
+          <div className='product' key={id} onClick={() => setDetailsId(id)}>
             <img className='product__image' src={image} alt={title} />
 
             <p className='product__description'>{title}</p>
@@ -176,7 +194,7 @@ const Display = ({ isWishlist }) => {
                 <span>{rating.rate}</span>
               </span>
 
-              <div onClick={() => toggleWishlist(id)}>
+              <div onClick={(e) => toggleWishlist(e, id)}>
                 {wishlist.includes(id) ? (
                   <FontAwesomeIcon color='#ffef96' icon={faHeart} />
                 ) : (
@@ -187,6 +205,9 @@ const Display = ({ isWishlist }) => {
           </div>
         ))}
       </section>
+
+      {/* modal for product details */}
+      <Details productId={detailsId} onClose={() => setDetailsId()} />
     </main>
   );
 };

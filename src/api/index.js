@@ -16,4 +16,10 @@ function getCategories() {
   );
 }
 
-export { getProducts, getProductsByCategory, getCategories };
+function getProductById(id) {
+  return fetch(`${API_BASE}/products/${id}`).then((response) =>
+    response.json()
+  );
+}
+
+export { getProducts, getProductsByCategory, getCategories, getProductById };

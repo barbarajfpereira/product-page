@@ -1,9 +1,5 @@
 @import '../../variables';
 
-* {
-  box-sizing: border-box;
-}
-
 .display {
   height: calc(100% - 80px);
   display: flex;
@@ -37,12 +33,17 @@
         min-width: 130px;
 
         &.active {
-          background-color: $background-primary;
-          color: $text-secondary;
+          background-color: $primary-color;
+          color: $text-light;
+
+          &:hover {
+            color: black;
+          }
         }
 
         &:hover {
-          background-color: lighten($background-primary, 60);
+          background-color: $accent-color;
+          cursor: pointer;
         }
       }
 
@@ -51,6 +52,13 @@
         margin-right: 20px;
         margin-bottom: 20px;
         font-family: inherit;
+        padding: 4px;
+      }
+
+      input:focus {
+        outline: none;
+        border: 2px solid $secondary-color;
+        box-shadow: 0 0 10px $accent-color;
       }
     }
   }
@@ -84,13 +92,13 @@
     max-height: 70px;
     flex: 1;
     text-align: center;
-    color: $text-primary;
   }
 
   &__details {
     width: 100%;
     display: flex;
     justify-content: space-around;
+    margin-top: 10px;
   }
 
   &__rating {
@@ -100,7 +108,7 @@
   }
 
   &:hover {
-    box-shadow: 0 0 20px $background-accent;
+    box-shadow: 0 0 20px $accent-color;
     cursor: pointer;
   }
 }
