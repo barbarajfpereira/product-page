@@ -4,9 +4,9 @@
   height: 80px;
   display: flex;
   align-items: center;
-  border-bottom: 2px solid $border-primary;
-  background-color: $background-primary;
-  color: $text-secondary;
+  border-bottom: 2px solid $border-light;
+  background-color: $primary-color;
+  color: $text-light;
 
   img {
     width: 40px;
@@ -20,12 +20,15 @@
 
   &__wishlist {
     margin-left: auto;
-    padding: 20px;
+    margin-right: 20px;
+    padding: 10px;
     cursor: pointer;
+    border: 2px solid $secondary-color;
+    border-radius: 10px;
 
     &.active {
-      color: $background-accent;
-      text-decoration: underline;
+      box-shadow: 0 0 10px $accent-color;
+      color: $accent-color;
     }
   }
 }

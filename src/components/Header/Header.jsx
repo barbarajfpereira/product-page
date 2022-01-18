@@ -7,12 +7,12 @@ const Header = ({ isWishlist, toggleIsWishlist }) => {
     <header className='header'>
       <img src={logo} alt='logo' />
       <h1 className='header__title'>Shopping</h1>
-      <h2
+      <p
         className={`header__wishlist ${isWishlist ? 'active' : ''}`}
         onClick={toggleIsWishlist}
       >
         Wishlist
-      </h2>
+      </p>
     </header>
   );
 };

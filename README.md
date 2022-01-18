@@ -2,7 +2,8 @@
 
 - List products
 - List products by category
-- Paginate list (page size = 5)
+- ~~Paginate list (page size = 5)~~
+  - API doesn't accept pagination. Can only access first page
 - Order list by name
 - Filter products
 - Search by name
