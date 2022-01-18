@@ -1,22 +1,31 @@
 import React, { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar, faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 import { getProducts, getProductsByCategory, getCategories } from '../../api';
 import './Display.scss';
-import rate from '../../assets/rate.png';
 
-const Display = () => {
+const Display = ({ isWishlist }) => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState(['all']);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [ordered, setOrdered] = useState(false);
   const [search, setSearch] = useState('');
-  const [minRating, setMinRating] = useState(null);
-  const [minPrice, setMinPrice] = useState(null);
-  const [maxPrice, setMaxPrice] = useState(null);
+  const [minRating, setMinRating] = useState();
+  const [minPrice, setMinPrice] = useState();
+  const [maxPrice, setMaxPrice] = useState();
+  const [wishlist, setWishlist] = useState([]);
 
   useEffect(() => {
     getCategories().then((categories) => {
       setCategories(['all', ...categories]);
     });
+
+    const storedWishlist = localStorage.getItem('wishlist');
+
+    if (storedWishlist) {
+      setWishlist(JSON.parse(storedWishlist));
+    }
   }, []);
 
   useEffect(() => {
@@ -31,12 +40,26 @@ const Display = () => {
     }
   }, [selectedCategory]);
 
+  const toggleWishlist = (id) => {
+    const newWishlist = wishlist.includes(id)
+      ? wishlist.filter((wishlistId) => wishlistId !== id)
+      : [...wishlist, id];
+
+    setWishlist(newWishlist);
+
+    localStorage.setItem('wishlist', JSON.stringify(newWishlist));
+  };
+
   let shownProducts = [...products];
 
+  if (isWishlist) {
+    shownProducts = shownProducts.filter(({ id }) => wishlist.includes(id));
+  }
+
   if (search.length) {
-    shownProducts = shownProducts.filter(({ title }) => {
-      return title.toUpperCase().includes(search.toUpperCase());
-    });
+    shownProducts = shownProducts.filter(({ title }) =>
+      title.toUpperCase().includes(search.toUpperCase())
+    );
   }
 
   if (minRating || minPrice || maxPrice) {
@@ -149,9 +172,18 @@ const Display = () => {
               <strong className='product__price'>{`${price} €`}</strong>
 
               <span className='product__rating'>
-                <img src={rate} alt='rating' />
+                <FontAwesomeIcon icon={faStar} />
+
                 <span>{rating.rate}</span>
               </span>
+
+              <div onClick={() => toggleWishlist(id)}>
+                {wishlist.includes(id) ? (
+                  <FontAwesomeIcon color='#ffef96' icon={faHeart} />
+                ) : (
+                  <FontAwesomeIcon icon={faHeartRegular} />
+                )}
+              </div>
             </div>
           </div>
         ))}

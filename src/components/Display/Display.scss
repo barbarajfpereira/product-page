@@ -93,14 +93,8 @@
   }
 
   &__rating {
-    span,
-    img {
-      vertical-align: middle;
-    }
-
-    img {
-      object-fit: contain;
-      margin-right: 6px;
+    span {
+      margin-left: 6px;
     }
   }
 
