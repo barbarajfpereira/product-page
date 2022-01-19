@@ -13,6 +13,7 @@ function App() {
   return (
     <div className='app'>
       <Header isWishlist={isWishlist} toggleIsWishlist={toggleIsWishlist} />
+
       <Display isWishlist={isWishlist} />
     </div>
   );

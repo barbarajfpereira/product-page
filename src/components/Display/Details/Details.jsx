@@ -23,8 +23,11 @@ const Details = ({ productId, onClose }) => {
     <div className='details' onClick={onClose}>
       <article className='details__modal'>
         <p>{title}</p>
+
         <img src={image} alt={title} width='100px' />
+
         <p>{description}</p>
+
         <button onClick={onClose}>Close</button>
       </article>
     </div>

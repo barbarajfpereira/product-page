@@ -21,20 +21,19 @@
     border-radius: 10px;
     font-size: 14px;
 
-    @media screen and (max-width: 700px) {
-      height: 520px;
-      width: 400px;
-      font-size: 14px;
-    }
-
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
 
     button {
-      cursor: pointer;
       align-self: flex-end;
+      cursor: pointer;
+    }
+
+    @media screen and (max-width: 700px) {
+      height: 520px;
+      width: 400px;
     }
   }
 }

@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
-// style
 import './Display.scss';
-// api
 import { getProducts, getProductsByCategory, getCategories } from '../../api';
-// components
 import Details from './Details/Details';
 // icons
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
